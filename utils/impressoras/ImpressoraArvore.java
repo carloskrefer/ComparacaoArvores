@@ -29,8 +29,15 @@ public class ImpressoraArvore {
 	
 	private void inserirRaizNaListaSuperior() {
 		Lista<Integer> listaAninhada = new Lista<Integer>();
-		listaAninhada.inserir(arvore.getRaiz().getDado()); // aqui está o ERRO! É PRA INSERIR O NOARVORE, E NÃO SÓ O VALOR DELE!
-		listaSuperior.inserir(listaAninhada);				// POIS NO MÉTODO POPULARLISTASUPERIOR VAMOS PERCORRER ESQUERDA E DIREITA DELE!
+		// Abaixo fiz new No<Integer>() ao invés de apenas arvore.getRaiz() porque
+		// arvore é do tipo ArvoreBinaria que não é genérico, e inserir() de NoArvore 
+		// espera um valor genérico.
+		// Não a interface ArvoreBinaria ser genérico porque a implementação dela
+		// só deverá aceitar inteiros (pois ele compara se um nó é maior ou igual ao
+		// outro nó, algo que não é possível se forem objetos). Nesse caso eu não
+		// ganharia nada em fazer ela ser T extends Integer ou algo do tipo.
+		listaAninhada.inserir(new No<Integer>(arvore.getRaiz().getDado())); 
+		listaSuperior.inserir(listaAninhada);				
 	}
 	
 	private void inserirNoProximoElementoDaListaSuperiorOsFilhosDosNosDoElementoAnterior() {
@@ -46,19 +53,17 @@ public class ImpressoraArvore {
 	// 1ª Iteração:
 	// 		((X -> null) -> (feX -> fdX -> null) -> null)
 	//        ^ É o noAninhadoAux
-	//                      ^ É a listaAux
+	//                      ^ É a listaAninhadaAux
 	// 2ª Iteração:
 	// 		((X -> null) -> (feX -> fdX -> null) -> (feFEX -> fdFEX -> feFDX -> fdFDX -> null)) -> null)
-	//						  ^ É o noAninhadoAux   ^ É a listaAux
+	//						  ^ É o noAninhadoAux   ^ É a listaAninhadaAux
 	// etc.
 	private void popularListaSuperior() {
 		No<Integer> noAninhadoAux = listaSuperior.getPrimeiroNo().getDado().getPrimeiroNo();
-		Lista<Integer> listaAux = listaSuperior.getPrimeiroNo().getProximoNo().getDado();
+		Lista<Integer> listaAninhadaAux = listaSuperior.getPrimeiroNo().getProximoNo().getDado();
 		
 		while (noAninhadoAux != null) {
-			// agora, se o filho esquerdo de noAninhadoAux for nulo, insere -1. senão, insere o valor dele.
-			// agora, se o filho direito  de noAninhadoAux for nulo, insere -1. senão, insere o valor dele.
-			
+			if (noAninhadoAux.getDado().get)
 			listaAux.inserir(noAninhadoAux);
 			noAninhadoAux.getProximoNo();
 		}
