@@ -6,8 +6,10 @@ public class Main {
 		ArvoreBinaria a = new ArvoreBinaria();
 		
 		a.inserir(5);
+		a.inserir(4);
 		a.inserir(6);
 		a.inserir(8);
+		a.inserir(9);
 		
 		a.imprimir();
 	}

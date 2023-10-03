@@ -32,9 +32,17 @@ public class ImpressoraArvore {
 		Lista<NoArvore> listaInterna;
 		No<NoArvore> noInterno;
 		
-		
+		int contadorEspacamento = arvore.buscarAltura() + 1;
 		
 		do {
+			if (contadorEspacamento != 1) {
+				for (int i = 0; i < contadorEspacamento; i++) {
+					System.out.print("\t");
+				}
+			}
+			
+			contadorEspacamento--;
+			
 			listaInterna = noSuperior.getDado();
 			noInterno = listaInterna.getPrimeiroNo();	
 			
