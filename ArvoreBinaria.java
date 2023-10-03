@@ -1,8 +1,8 @@
 package com.krefer;
 public class ArvoreBinaria {
-	private NoArvoreImpl raiz;
+	private NoArvore raiz;
 	
-	public NoArvoreImpl getRaiz() {
+	public NoArvore getRaiz() {
 		return raiz;
 	}
 
@@ -11,18 +11,18 @@ public class ArvoreBinaria {
 		adicionar(raiz, dado); // Argumento é o nó raiz pois sempre começamos analisando a raiz.
 	}
 
-	private void adicionar(NoArvoreImpl no, int dado) {
+	private void adicionar(NoArvore no, int dado) {
 		if (raiz == null) {
-			raiz = new NoArvoreImpl(dado);
+			raiz = new NoArvore(dado);
 		} else if (dado >= no.getDado()) {
 			if (no.getNoDireito() == null) {
-				no.setNoDireito(new NoArvoreImpl(dado));
+				no.setNoDireito(new NoArvore(dado));
 			} else {
 				adicionar(no.getNoDireito(), dado);
 			}
 		} else {
 			if (no.getNoEsquerdo() == null) {
-				no.setNoEsquerdo(new NoArvoreImpl(dado));
+				no.setNoEsquerdo(new NoArvore(dado));
 			} else {
 				adicionar(no.getNoEsquerdo(), dado);
 			}
@@ -58,7 +58,7 @@ public class ArvoreBinaria {
 		removerNo(raiz, valor, null); // Começamos pela raiz. O pai é null pois
 	} // a raiz não possui pai (por isso, null).
 
-	private NoArvoreImpl removerNo(NoArvoreImpl no, Integer valor, NoArvoreImpl pai) {
+	private NoArvore removerNo(NoArvore no, Integer valor, NoArvore pai) {
 		// Este nó não é nulo. Isso é importante, pois daria erro ao fazer o próximo IF
 		// comparando um null com um valor.
 		if (no != null) {
@@ -131,7 +131,7 @@ public class ArvoreBinaria {
 		return null;
 	}
 
-	private NoArvoreImpl maiorEsquerda(NoArvoreImpl no) {
+	private NoArvore maiorEsquerda(NoArvore no) {
 		// Para encontrar o maior à esquerda do nó, primeiro temos que saber se existe
 		// nós a esquerda.
 		if (no.getNoEsquerdo() != null) {
