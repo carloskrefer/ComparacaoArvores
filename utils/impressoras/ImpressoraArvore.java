@@ -22,19 +22,34 @@ public class ImpressoraArvore {
 		
 		inserirRaizNaListaSuperior();
 		
-		inserirNoProximoElementoDaListaSuperiorOsFilhosDosNosDoElementoAnterior();
+		popularListaSuperior();
 		
+		imprimirListaSuperior();
+	}
+	
+	private void imprimirListaSuperior() {
+		No<Lista<NoArvore>> noSuperior = listaSuperior.getPrimeiroNo();
+		Lista<NoArvore> listaInterna;
+		No<NoArvore> noInterno;
 		
+		do {
+			listaInterna = noSuperior.getDado();
+			noInterno = listaInterna.getPrimeiroNo();	
+			
+//			do {
+//				System.out.println("");
+//			} while (noInterno.getDado() != null);
+			
+			listaInterna.imprimir();
+			
+			noSuperior = noSuperior.getProximoNo();
+		} while (noSuperior != null);
 	}
 	
 	private void inserirRaizNaListaSuperior() {
 		Lista<NoArvore> listaAninhada = new Lista<NoArvore>();
 		listaAninhada.inserir(arvore.getRaiz()); 
 		listaSuperior.inserir(listaAninhada);				
-	}
-	
-	private void inserirNoProximoElementoDaListaSuperiorOsFilhosDosNosDoElementoAnterior() {
-		popularListaSuperior();
 	}
 	
 	// Sendo feK o filho esquerdo de K, fdK o filho direito de K, () simbolizando uma 
@@ -52,49 +67,55 @@ public class ImpressoraArvore {
 	//						  ^ É o noAninhadoAux   ^ É a listaAninhadaAux
 	// etc.
 	private void popularListaSuperior() {
+		int FLAG_NO_NAO_EXISTE = -1;
+		boolean isListaAninhadaAuxPopuladaApenasComFlags;
+		
 		//((X -> null) -> null)
 		//  ^ noAninhadoAux
 		No<NoArvore> noAninhadoAux = listaSuperior.getPrimeiroNo().getDado().getPrimeiroNo();
+		
 		//((X -> null) -> (null) -> null)	
-		//                ^ Adicionada nova lista dentro da listaSuperior
+		//                ^ Adicionada nova lista dentro da listaSuperior pro noSuperior poder usá-lo
 		listaSuperior.inserir(new Lista<NoArvore>());
-		//((X -> null) -> (null) -> null)	
-		//               
-		
-		Lista<NoArvore> listaAninhadaAux = listaSuperior.getPrimeiroNo().getProximoNo().getDado();
-		Integer FLAG_NO_NAO_EXISTE = -1;
-		
-			
+
+		No<Lista<NoArvore>> noSuperior = listaSuperior.getPrimeiroNo();
+		Lista<NoArvore> listaAninhadaAux;
+		// Este do-while serve para percorrer a lista superior
 		do {
-			if (noAninhadoAux.getDado().getDado() == FLAG_NO_NAO_EXISTE) {
-				listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
-				listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
-				continue;
-			}
+
+			isListaAninhadaAuxPopuladaApenasComFlags = true;			
+			noSuperior = noSuperior.getProximoNo();
+			listaAninhadaAux = noSuperior.getDado();
 			
-			if (noAninhadoAux.getDado().getNoEsquerdo() != null) {
-				listaAninhadaAux.inserir(noAninhadoAux.getDado().getNoEsquerdo());
-			} else {
-				listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
-			}
+			// Este do-while serve para percorrer a lista interna
+			do {
+				if (noAninhadoAux.getDado().getDado() == FLAG_NO_NAO_EXISTE) {
+					listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
+					listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
+					continue;
+				}
+				
+				if (noAninhadoAux.getDado().getNoEsquerdo() != null) {
+					listaAninhadaAux.inserir(noAninhadoAux.getDado().getNoEsquerdo());
+					isListaAninhadaAuxPopuladaApenasComFlags = false;
+				} else {
+					listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
+				}
+				
+				if (noAninhadoAux.getDado().getNoDireito() != null) {
+					listaAninhadaAux.inserir(noAninhadoAux.getDado().getNoDireito());
+					isListaAninhadaAuxPopuladaApenasComFlags = false;
+				} else {
+					listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
+				}
+				
+				noAninhadoAux = noAninhadoAux.getProximoNo();
+			} while ((noAninhadoAux != null));
 			
-			if (noAninhadoAux.getDado().getNoDireito() != null) {
-				listaAninhadaAux.inserir(noAninhadoAux.getDado().getNoDireito());
-			} else {
-				listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
-			}
-			
-			noAninhadoAux.getProximoNo();
-		} while (noAninhadoAux != null);
-		
-		
+			if (!isListaAninhadaAuxPopuladaApenasComFlags) {
+				listaSuperior.inserir(new Lista<NoArvore>());
+			}	
+		} while (!isListaAninhadaAuxPopuladaApenasComFlags);
 	}
 	
-	
-	
-	
-	
-
-	
-
 }

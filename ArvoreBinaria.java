@@ -1,4 +1,7 @@
 package com.krefer;
+
+import com.krefer.utils.impressoras.ImpressoraArvore;
+
 public class ArvoreBinaria {
 	private NoArvore raiz;
 	
@@ -6,25 +9,25 @@ public class ArvoreBinaria {
 		return raiz;
 	}
 
-	// Método que o usuário acessa para adicionar um valor na árvore.
-	public void adicionar(int dado) {
-		adicionar(raiz, dado); // Argumento é o nó raiz pois sempre começamos analisando a raiz.
+	// Método que o usuário acessa para inserir um valor na árvore.
+	public void inserir(int dado) {
+		inserir(raiz, dado); // Argumento é o nó raiz pois sempre começamos analisando a raiz.
 	}
 
-	private void adicionar(NoArvore no, int dado) {
+	private void inserir(NoArvore no, int dado) {
 		if (raiz == null) {
 			raiz = new NoArvore(dado);
 		} else if (dado >= no.getDado()) {
 			if (no.getNoDireito() == null) {
 				no.setNoDireito(new NoArvore(dado));
 			} else {
-				adicionar(no.getNoDireito(), dado);
+				inserir(no.getNoDireito(), dado);
 			}
 		} else {
 			if (no.getNoEsquerdo() == null) {
 				no.setNoEsquerdo(new NoArvore(dado));
 			} else {
-				adicionar(no.getNoEsquerdo(), dado);
+				inserir(no.getNoEsquerdo(), dado);
 			}
 		}
 	}
@@ -47,11 +50,9 @@ public class ArvoreBinaria {
 //			System.out.println(prefix + (isLeft ? "├── " : "└── ") + "Vazio");
 //		}
 //	}
-
+	
 	public void imprimir() {
-		
-		
-		
+		new ImpressoraArvore(this).imprimir();
 	}
 	
 	public void removerNo(Integer valor) {
@@ -142,6 +143,25 @@ public class ArvoreBinaria {
 			}
 		}
 		return no;
+	}
+	
+	public int buscarAltura() {
+		return buscarAltura(raiz);
+	}
+	
+	protected int buscarAltura(NoArvore no) {
+		if (no == null) {
+			return -1;
+		}
+		
+		int esquerda = buscarAltura(no.getNoEsquerdo());
+		int direita = buscarAltura(no.getNoDireito());
+		
+		if (esquerda > direita) {
+			return 1 + esquerda;
+		}
+		
+		return 1 + direita;
 	}
 
 }
