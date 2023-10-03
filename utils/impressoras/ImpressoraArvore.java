@@ -32,16 +32,17 @@ public class ImpressoraArvore {
 		Lista<NoArvore> listaInterna;
 		No<NoArvore> noInterno;
 		
+		
+		
 		do {
 			listaInterna = noSuperior.getDado();
 			noInterno = listaInterna.getPrimeiroNo();	
 			
-//			do {
-//				System.out.println("");
-//			} while (noInterno.getDado() != null);
-			
-			listaInterna.imprimir();
-			
+			do {
+				System.out.print(noInterno.getDado().getDado() + "\t");
+				noInterno = noInterno.getProximoNo();
+			} while (noInterno != null);
+			System.out.println();
 			noSuperior = noSuperior.getProximoNo();
 		} while (noSuperior != null);
 	}
@@ -69,10 +70,7 @@ public class ImpressoraArvore {
 	private void popularListaSuperior() {
 		int FLAG_NO_NAO_EXISTE = -1;
 		boolean isListaAninhadaAuxPopuladaApenasComFlags;
-		
-		//((X -> null) -> null)
-		//  ^ noAninhadoAux
-		No<NoArvore> noAninhadoAux = listaSuperior.getPrimeiroNo().getDado().getPrimeiroNo();
+		No<NoArvore> noAninhadoAux;
 		
 		//((X -> null) -> (null) -> null)	
 		//                ^ Adicionada nova lista dentro da listaSuperior pro noSuperior poder usá-lo
@@ -82,7 +80,7 @@ public class ImpressoraArvore {
 		Lista<NoArvore> listaAninhadaAux;
 		// Este do-while serve para percorrer a lista superior
 		do {
-
+			noAninhadoAux = noSuperior.getDado().getPrimeiroNo();
 			isListaAninhadaAuxPopuladaApenasComFlags = true;			
 			noSuperior = noSuperior.getProximoNo();
 			listaAninhadaAux = noSuperior.getDado();
@@ -92,6 +90,7 @@ public class ImpressoraArvore {
 				if (noAninhadoAux.getDado().getDado() == FLAG_NO_NAO_EXISTE) {
 					listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
 					listaAninhadaAux.inserir(new NoArvore(FLAG_NO_NAO_EXISTE));
+					noAninhadoAux = noAninhadoAux.getProximoNo();
 					continue;
 				}
 				

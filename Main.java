@@ -7,13 +7,9 @@ public class Main {
 		
 		a.inserir(5);
 		a.inserir(6);
-		a.inserir(4);
-		
-		System.out.println(a.buscarAltura());
+		a.inserir(8);
 		
 		a.imprimir();
-		
-		System.out.println("oi");
 	}
 
 }
