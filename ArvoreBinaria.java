@@ -32,7 +32,7 @@ public class ArvoreBinaria {
 		}
 	}
 
-//	public void imprimir(No node, String prefix, boolean isLeft) {
+//	public void imprimir(NoArvore node, String prefix, boolean isLeft) {
 //		if (node != null) {
 //			System.out.println(prefix + (isLeft ? "├── " : "└── ") + node.getDado());
 //
@@ -50,6 +50,29 @@ public class ArvoreBinaria {
 //			System.out.println(prefix + (isLeft ? "├── " : "└── ") + "Vazio");
 //		}
 //	}
+	
+	public void buscar(int valor) {
+		buscar(valor, raiz);
+	}
+	
+	// Não chamar quando raiz for nula
+	private void buscar(int valorBuscado, NoArvore no) {
+		if (no.getDado() == valorBuscado) {
+			System.out.println("Valor " + valorBuscado + " encontrado!");
+		} else if (valorBuscado >= no.getDado()) {
+			if (no.getNoDireito() != null) {
+				buscar(valorBuscado, no.getNoDireito());
+			} else {
+				System.out.println("Valor " + valorBuscado + " não encontrado...");
+			}
+		} else {
+			if (no.getNoEsquerdo() != null) {
+				buscar(valorBuscado, no.getNoEsquerdo());
+			} else {
+				System.out.println("Valor " + valorBuscado + " não encontrado...");
+			}
+		}
+	}
 	
 	public void imprimir() {
 		new ImpressoraArvore(this).imprimir();

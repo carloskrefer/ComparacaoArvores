@@ -8,7 +8,9 @@ public class Main {
 		a.inserir(5);
 		a.inserir(4);
 		a.inserir(6);
-		a.inserir(8);
+		a.inserir(7);
+		a.inserir(10);
+		a.inserir(12);
 		a.inserir(9);
 		
 		a.imprimir();
