@@ -1,38 +1,38 @@
 package com.krefer;
 
-import com.krefer.utils.impressoras.ImpressoraArvore;
+import com.krefer.utils.impressoras.ImpressoraArvoreAVL;
 
-public class ArvoreBinaria {
-	private NoArvore raiz;
-	
-	public NoArvore getRaiz() {
+public class ArvoreBinariaAVL {
+	private NoArvoreAVL raiz;
+
+	public NoArvoreAVL getRaiz() {
 		return raiz;
 	}
 
 	// Método que o usuário acessa para inserir um valor na árvore.
 	public void inserir(int dado) {
-		inserir(raiz, dado); // Argumento é o nó raiz pois sempre começamos analisando a raiz.
+		inserir(raiz, dado); 
 	}
 
-	private void inserir(NoArvore no, int dado) {
+	private void inserir(NoArvoreAVL no, int dado) {
 		if (raiz == null) {
-			raiz = new NoArvore(dado);
+			raiz = new NoArvoreAVL(dado);
 		} else if (dado >= no.getDado()) {
 			if (no.getNoDireito() == null) {
-				no.setNoDireito(new NoArvore(dado));
+				no.setNoDireito(new NoArvoreAVL(dado));
 			} else {
 				inserir(no.getNoDireito(), dado);
 			}
 		} else {
 			if (no.getNoEsquerdo() == null) {
-				no.setNoEsquerdo(new NoArvore(dado));
+				no.setNoEsquerdo(new NoArvoreAVL(dado));
 			} else {
 				inserir(no.getNoEsquerdo(), dado);
 			}
 		}
 	}
 
-//	public void imprimir(NoArvore node, String prefix, boolean isLeft) {
+//	public void imprimir(NoArvoreAVL node, String prefix, boolean isLeft) {
 //		if (node != null) {
 //			System.out.println(prefix + (isLeft ? "├── " : "└── ") + node.getDado());
 //
@@ -50,13 +50,13 @@ public class ArvoreBinaria {
 //			System.out.println(prefix + (isLeft ? "├── " : "└── ") + "Vazio");
 //		}
 //	}
-	
+
 	public void buscar(int valor) {
 		buscar(valor, raiz);
 	}
-	
+
 	// Não chamar quando raiz for nula
-	private void buscar(int valorBuscado, NoArvore no) {
+	private void buscar(int valorBuscado, NoArvoreAVL no) {
 		if (no.getDado() == valorBuscado) {
 			System.out.println("Valor " + valorBuscado + " encontrado!");
 		} else if (valorBuscado >= no.getDado()) {
@@ -73,16 +73,16 @@ public class ArvoreBinaria {
 			}
 		}
 	}
-	
+
 	public void imprimir() {
-		new ImpressoraArvore(this).imprimir();
+		new ImpressoraArvoreAVL(this).imprimir();
 	}
-	
+
 	public void remover(Integer valor) {
 		removerNo(raiz, valor, null); // Começamos pela raiz. O pai é null pois
 	} // a raiz não possui pai (por isso, null).
 
-	private NoArvore removerNo(NoArvore no, Integer valor, NoArvore pai) {
+	private NoArvoreAVL removerNo(NoArvoreAVL no, Integer valor, NoArvoreAVL pai) {
 		// Este nó não é nulo. Isso é importante, pois daria erro ao fazer o próximo IF
 		// comparando um null com um valor.
 		if (no != null) {
@@ -155,7 +155,7 @@ public class ArvoreBinaria {
 		return null;
 	}
 
-	private NoArvore maiorEsquerda(NoArvore no) {
+	private NoArvoreAVL maiorEsquerda(NoArvoreAVL no) {
 		// Para encontrar o maior à esquerda do nó, primeiro temos que saber se existe
 		// nós a esquerda.
 		if (no.getNoEsquerdo() != null) {
@@ -167,23 +167,23 @@ public class ArvoreBinaria {
 		}
 		return no;
 	}
-	
+
 	public int buscarAltura() {
 		return buscarAltura(raiz);
 	}
-	
-	protected int buscarAltura(NoArvore no) {
+
+	static int buscarAltura(NoArvoreAVL no) {
 		if (no == null) {
 			return -1;
 		}
-		
+
 		int esquerda = buscarAltura(no.getNoEsquerdo());
 		int direita = buscarAltura(no.getNoDireito());
-		
+
 		if (esquerda > direita) {
 			return 1 + esquerda;
 		}
-		
+
 		return 1 + direita;
 	}
 
