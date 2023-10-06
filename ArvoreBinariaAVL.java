@@ -1,6 +1,7 @@
 package com.krefer;
 
 import com.krefer.utils.impressoras.ImpressoraArvoreAVL;
+import com.krefer.utils.pilha_dinamica.Pilha;
 
 public class ArvoreBinariaAVL {
 	private NoArvoreAVL raiz;
@@ -11,23 +12,99 @@ public class ArvoreBinariaAVL {
 
 	// Método que o usuário acessa para inserir um valor na árvore.
 	public void inserir(int dado) {
-		inserir(raiz, dado); 
+		NoArvoreAVL noPaiPercorrido;
+		Pilha<NoArvoreAVL> pilhaNosPaisPercorridos = new Pilha<NoArvoreAVL>();
+		inserir(raiz, dado, pilhaNosPaisPercorridos); 
+		boolean rotacaoOcorreu = false;
+		Pilha<NoArvoreAVL> pilhaRecalculoFatorBalanceamento = new Pilha<NoArvoreAVL>();
+		
+		// Esse loop while só serve pra achar o pai mais próximo do nó inserido que
+		// passou a ter balanceamento > 1 ou < -1 após a inserção, a fim de 
+		// realizar a rotação nele e se necessário nos seus filhos também (casos particulares).
+		// Mas isso não garante que após a rotação eles terão um fator de balanceamento
+		// correto. Pra isso eu adicionei um loop while lá no final que confere todos eles (
+		// percebi que no caso de adição com ou sem rotação só precisa recalcular o balanceamento
+		// deles).
+		while (!pilhaNosPaisPercorridos.estaVazia()) {
+			noPaiPercorrido = pilhaNosPaisPercorridos.remover().getDado();
+			pilhaRecalculoFatorBalanceamento.inserir(noPaiPercorrido);
+			noPaiPercorrido.atualizarFatorBalanceamento();
+			if (Math.abs(noPaiPercorrido.getFatorBalanceamento()) > 1) {
+				realizarRotacoes(noPaiPercorrido);
+				rotacaoOcorreu = true;
+				break;
+			}
+		}
+		
+		// 
+		while (!pilhaRecalculoFatorBalanceamento.estaVazia()) {
+			pilhaRecalculoFatorBalanceamento.remover().getDado().atualizarFatorBalanceamento();
+		}
+	}
+	
+	private void realizarRotacoes(NoArvoreAVL no) {
+		NoArvoreAVL filhoComFatorMaisUm = obterFilhoComFatorEspecificado(1, no);
+		NoArvoreAVL filhoComFatorMenosUm = obterFilhoComFatorEspecificado(-1, no);
+		boolean haFilhoComFatorMaisUm = filhoComFatorMaisUm != null;
+		boolean haFilhoComFatorMenosUm = filhoComFatorMenosUm != null;
+		
+		switch (no.getFatorBalanceamento()) {
+		case -2:
+			if (haFilhoComFatorMenosUm) {
+				rotacaoEsquerda(no);
+			}
+		}
+	}
+	
+	private void rotacaoEsquerda(NoArvoreAVL no) {
+		NoArvoreAVL novaRaizSubarvore = no.getNoDireito();
+		NoArvoreAVL antigoNoEsquerdoDaNovaRaizSubArvore = novaRaizSubarvore.getNoEsquerdo();
+		novaRaizSubarvore.setNoEsquerdo(no);
+		no.setNoDireito(antigoNoEsquerdoDaNovaRaizSubArvore);
+		
+		if (no == raiz) {
+			raiz = novaRaizSubarvore;
+		} else {
+			NoArvoreAVL noPaiDoNoRotacionado = buscarNoPai(no);
+			if (noPaiDoNoRotacionado.getNoDireito() == no) {
+				noPaiDoNoRotacionado.setNoDireito(novaRaizSubarvore);
+			} else {
+				noPaiDoNoRotacionado.setNoEsquerdo(novaRaizSubarvore);
+			}
+		}
+	}
+	
+	private NoArvoreAVL obterFilhoComFatorEspecificado(int fatorBuscado, NoArvoreAVL noPai) {
+		if ((noPai.getNoDireito() != null) && (noPai.getNoDireito().getFatorBalanceamento() == fatorBuscado)) {
+			return noPai.getNoDireito();
+		} else if ((noPai.getNoEsquerdo() != null) && (noPai.getNoEsquerdo().getFatorBalanceamento() == fatorBuscado)) {
+			return noPai.getNoEsquerdo();
+		} else {
+			return null;
+		}
 	}
 
-	private void inserir(NoArvoreAVL no, int dado) {
+	// listaNosPercorridos são os pais (ou avôs, bisavôs, etc) do nó inserido que foram
+	// percorridos até achar o lugar para inserí-lo. Serve pra eu saber quem que precisará
+	// ter seu fator de balanceamento recalculado.
+	private void inserir(NoArvoreAVL no, int dado, Pilha<NoArvoreAVL> pilhaNosPaisPercorridos) {
 		if (raiz == null) {
 			raiz = new NoArvoreAVL(dado);
 		} else if (dado >= no.getDado()) {
 			if (no.getNoDireito() == null) {
+				pilhaNosPaisPercorridos.inserir(no); 
 				no.setNoDireito(new NoArvoreAVL(dado));
 			} else {
-				inserir(no.getNoDireito(), dado);
+				pilhaNosPaisPercorridos.inserir(no); 
+				inserir(no.getNoDireito(), dado, pilhaNosPaisPercorridos);
 			}
 		} else {
 			if (no.getNoEsquerdo() == null) {
+				pilhaNosPaisPercorridos.inserir(no); 
 				no.setNoEsquerdo(new NoArvoreAVL(dado));
 			} else {
-				inserir(no.getNoEsquerdo(), dado);
+				pilhaNosPaisPercorridos.inserir(no); 
+				inserir(no.getNoEsquerdo(), dado, pilhaNosPaisPercorridos);
 			}
 		}
 	}
@@ -71,6 +148,25 @@ public class ArvoreBinariaAVL {
 			} else {
 				System.out.println("Valor " + valorBuscado + " não encontrado...");
 			}
+		}
+	}
+	
+	private NoArvoreAVL buscarNoPai(NoArvoreAVL noFilho) {
+		return buscarNoPai(noFilho, raiz);
+	}
+	
+	private NoArvoreAVL buscarNoPai(NoArvoreAVL noFilhoAlvo, NoArvoreAVL noAtual) {
+		if (noFilhoAlvo == raiz) {
+			return null;
+		}
+		if ((noAtual.getNoEsquerdo() == noFilhoAlvo) || (noAtual.getNoDireito() == noFilhoAlvo)) {
+			return noAtual;
+		}
+		
+		if (noFilhoAlvo.getDado() < noAtual.getDado()) {
+			return (noAtual.getNoEsquerdo() == null) ? null : buscarNoPai(noFilhoAlvo, noAtual.getNoEsquerdo());
+		} else {
+			return (noAtual.getNoDireito() == null) ? null : buscarNoPai(noFilhoAlvo, noAtual.getNoDireito());
 		}
 	}
 
