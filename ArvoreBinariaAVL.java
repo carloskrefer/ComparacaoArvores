@@ -52,6 +52,9 @@ public class ArvoreBinariaAVL {
 			case -2:
 				if (haFilhoComFatorMenosUm) {
 					realizarRotacaoEsquerda(no);
+				} else if (haFilhoComFatorMaisUm) {
+					realizarRotacaoDireita(filhoComFatorMaisUm);
+					realizarRotacaoEsquerda(no);
 				}
 				break;
 			case 2:
