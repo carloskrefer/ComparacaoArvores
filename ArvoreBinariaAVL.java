@@ -43,15 +43,22 @@ public class ArvoreBinariaAVL {
 	}
 	
 	private void realizarRotacoes(NoArvoreAVL no) {
-		NoArvoreAVL filhoComFatorMaisUm = obterFilhoComFatorEspecificado(1, no);
+		NoArvoreAVL filhoComFatorMaisUm =  obterFilhoComFatorEspecificado(1, no);
 		NoArvoreAVL filhoComFatorMenosUm = obterFilhoComFatorEspecificado(-1, no);
-		boolean haFilhoComFatorMaisUm = filhoComFatorMaisUm != null;
+		boolean haFilhoComFatorMaisUm =  filhoComFatorMaisUm != null;
 		boolean haFilhoComFatorMenosUm = filhoComFatorMenosUm != null;
 		
 		switch (no.getFatorBalanceamento()) {
 		case -2:
 			if (haFilhoComFatorMenosUm) {
 				rotacaoEsquerda(no);
+			} else if (haFilhoComFatorMaisUm) {
+				
+			}
+			break;
+		case 2:
+			if (haFilhoComFatorMaisUm) {
+				System.out.println("adicionar coisa aqui");
 			}
 		}
 	}
