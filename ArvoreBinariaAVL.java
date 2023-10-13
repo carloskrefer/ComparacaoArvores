@@ -49,25 +49,42 @@ public class ArvoreBinariaAVL {
 		boolean haFilhoComFatorMenosUm = filhoComFatorMenosUm != null;
 		
 		switch (no.getFatorBalanceamento()) {
-		case -2:
-			if (haFilhoComFatorMenosUm) {
-				rotacaoEsquerda(no);
-			} else if (haFilhoComFatorMaisUm) {
-				
-			}
-			break;
-		case 2:
-			if (haFilhoComFatorMaisUm) {
-				System.out.println("adicionar coisa aqui");
-			}
+			case -2:
+				if (haFilhoComFatorMenosUm) {
+					realizarRotacaoEsquerda(no);
+				}
+				break;
+			case 2:
+				if (haFilhoComFatorMaisUm) {
+					realizarRotacaoDireita(no);
+				}
+				break;
 		}
 	}
 	
-	private void rotacaoEsquerda(NoArvoreAVL no) {
+	private void realizarRotacaoEsquerda(NoArvoreAVL no) {
 		NoArvoreAVL novaRaizSubarvore = no.getNoDireito();
 		NoArvoreAVL antigoNoEsquerdoDaNovaRaizSubArvore = novaRaizSubarvore.getNoEsquerdo();
 		novaRaizSubarvore.setNoEsquerdo(no);
 		no.setNoDireito(antigoNoEsquerdoDaNovaRaizSubArvore);
+		
+		if (no == raiz) {
+			raiz = novaRaizSubarvore;
+		} else {
+			NoArvoreAVL noPaiDoNoRotacionado = buscarNoPai(no);
+			if (noPaiDoNoRotacionado.getNoDireito() == no) {
+				noPaiDoNoRotacionado.setNoDireito(novaRaizSubarvore);
+			} else {
+				noPaiDoNoRotacionado.setNoEsquerdo(novaRaizSubarvore);
+			}
+		}
+	}
+	
+	private void realizarRotacaoDireita(NoArvoreAVL no) {
+		NoArvoreAVL novaRaizSubarvore = no.getNoEsquerdo();
+		NoArvoreAVL antigoNoDireitoDaNovaRaizSubArvore = novaRaizSubarvore.getNoDireito();
+		novaRaizSubarvore.setNoDireito(no);
+		no.setNoEsquerdo(antigoNoDireitoDaNovaRaizSubArvore);
 		
 		if (no == raiz) {
 			raiz = novaRaizSubarvore;
