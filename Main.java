@@ -14,8 +14,9 @@ public class Main {
 		a.inserir(17);
 		a.inserir(12);
 		a.inserir(14);
+		a.inserir(16);
 		a.inserir(18);
-		a.inserir(11);
+		a.inserir(20);
 
 		a.imprimir();
 	}

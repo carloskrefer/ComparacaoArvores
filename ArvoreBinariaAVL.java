@@ -15,7 +15,6 @@ public class ArvoreBinariaAVL {
 		NoArvoreAVL noPaiPercorrido;
 		Pilha<NoArvoreAVL> pilhaNosPaisPercorridos = new Pilha<NoArvoreAVL>();
 		inserir(raiz, dado, pilhaNosPaisPercorridos); 
-		boolean rotacaoOcorreu = false;
 		Pilha<NoArvoreAVL> pilhaRecalculoFatorBalanceamento = new Pilha<NoArvoreAVL>();
 		
 		// Esse loop while só serve pra achar o pai mais próximo do nó inserido que
@@ -31,37 +30,49 @@ public class ArvoreBinariaAVL {
 			noPaiPercorrido.atualizarFatorBalanceamento();
 			if (Math.abs(noPaiPercorrido.getFatorBalanceamento()) > 1) {
 				realizarRotacoes(noPaiPercorrido);
-				rotacaoOcorreu = true;
 				break;
 			}
 		}
 		
-		// 
 		while (!pilhaRecalculoFatorBalanceamento.estaVazia()) {
 			pilhaRecalculoFatorBalanceamento.remover().getDado().atualizarFatorBalanceamento();
 		}
 	}
 	
 	private void realizarRotacoes(NoArvoreAVL no) {
-		NoArvoreAVL filhoComFatorMaisUm =  obterFilhoComFatorEspecificado(1, no);
-		NoArvoreAVL filhoComFatorMenosUm = obterFilhoComFatorEspecificado(-1, no);
-		boolean haFilhoComFatorMaisUm =  filhoComFatorMaisUm != null;
-		boolean haFilhoComFatorMenosUm = filhoComFatorMenosUm != null;
+		NoArvoreAVL filhoQueSofreuInsercao = obterFilhoQueSofreuInsercao(no);
+		
+		boolean isFatorFilhoQueSofreuInsercaoMaisUm  = filhoQueSofreuInsercao.getFatorBalanceamento() ==  1;
+		boolean isFatorFilhoQueSofreuInsercaoMenosUm = filhoQueSofreuInsercao.getFatorBalanceamento() == -1;
 		
 		switch (no.getFatorBalanceamento()) {
 			case -2:
-				if (haFilhoComFatorMenosUm) {
+				if (isFatorFilhoQueSofreuInsercaoMenosUm) {
 					realizarRotacaoEsquerda(no);
-				} else if (haFilhoComFatorMaisUm) {
-					realizarRotacaoDireita(filhoComFatorMaisUm);
+				} else if (isFatorFilhoQueSofreuInsercaoMaisUm) {
+					realizarRotacaoDireita(filhoQueSofreuInsercao);
 					realizarRotacaoEsquerda(no);
 				}
 				break;
 			case 2:
-				if (haFilhoComFatorMaisUm) {
+				if (isFatorFilhoQueSofreuInsercaoMaisUm) {
+					realizarRotacaoDireita(no);
+				} else if (isFatorFilhoQueSofreuInsercaoMenosUm) {
+					realizarRotacaoEsquerda(filhoQueSofreuInsercao);
 					realizarRotacaoDireita(no);
 				}
 				break;
+		}
+	}
+	
+	private NoArvoreAVL obterFilhoQueSofreuInsercao(NoArvoreAVL noPai) {		
+		int alturaNoEsquerdo = buscarAltura(noPai.getNoEsquerdo());
+		int alturaNoDireito  = buscarAltura(noPai.getNoDireito());
+		
+		if (alturaNoEsquerdo > alturaNoDireito) {
+			return noPai.getNoEsquerdo();
+		} else {
+			return noPai.getNoDireito();
 		}
 	}
 	
@@ -98,16 +109,6 @@ public class ArvoreBinariaAVL {
 			} else {
 				noPaiDoNoRotacionado.setNoEsquerdo(novaRaizSubarvore);
 			}
-		}
-	}
-	
-	private NoArvoreAVL obterFilhoComFatorEspecificado(int fatorBuscado, NoArvoreAVL noPai) {
-		if ((noPai.getNoDireito() != null) && (noPai.getNoDireito().getFatorBalanceamento() == fatorBuscado)) {
-			return noPai.getNoDireito();
-		} else if ((noPai.getNoEsquerdo() != null) && (noPai.getNoEsquerdo().getFatorBalanceamento() == fatorBuscado)) {
-			return noPai.getNoEsquerdo();
-		} else {
-			return null;
 		}
 	}
 
