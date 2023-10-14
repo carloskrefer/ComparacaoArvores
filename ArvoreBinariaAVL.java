@@ -238,9 +238,6 @@ public class ArvoreBinariaAVL {
 					} else {
 						pai.setNoEsquerdo(no.getNoDireito());
 					}
-					// DÚVIDA NÃO ENTENDI A NECESSIDADE DE DIZER QUE LEFT DO NÓ É NULL, POIS JÁ É
-					// NULL.
-					no.setNoEsquerdo(null);
 					// Este nó não é nulo, é aquele que queremos remover, só possui filho a
 					// esquerda.
 				} else if (no.getNoDireito() == null) {
@@ -253,8 +250,6 @@ public class ArvoreBinariaAVL {
 					} else {
 						pai.setNoEsquerdo(no.getNoEsquerdo());
 					}
-					// DUVIDA NAO ENTENDI A NECESSIDADE DE DIZER QUE LEFT É NULL.
-					no.setNoEsquerdo(null);
 					// Este nó não é nulo, é aquele que queremos remover, possui filho a direita e a
 					// esquerda.
 				} else {
