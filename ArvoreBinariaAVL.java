@@ -244,7 +244,7 @@ public class ArvoreBinariaAVL {
 			}
 		}
 		
-		recalcularTodosFatores();
+		recalcularTodosFatores(); // isso faz a AVL perder muita performance
 
 	}
 	
@@ -319,15 +319,9 @@ public class ArvoreBinariaAVL {
 					// Obtém o  maior nó da esquerda do nó que queremos remover.
 					NoArvoreAVL noMaiorEsquerda = buscarMaiorNoEsquerda(noPercorrido);
 
-					// Queremos que o noPercorrido seja inserido na pilha, pois ele receberá o valor do maior da 
-					// esquerda e deverá ser recalculado seu balanceamento.
-					// Mas, se o maior da esquerda for exatamente o filho da esquerda dele, então noPercorrido não será inserido
-					// na pilha. A condição abaixo busca conferir isso e inserí-lo se for o caso.
-					if (noPercorrido.getNoEsquerdo() == noMaiorEsquerda) {
-						pilhaNosPercorridos.inserir(noPercorrido);
-					}
+					pilhaNosPercorridos.inserir(noPercorrido);
 					
-					remover(noPercorrido, noMaiorEsquerda.getDado(), paiNoPercorrido, pilhaNosPercorridos);
+					remover(noPercorrido.getNoEsquerdo(), noMaiorEsquerda.getDado(), noPercorrido, pilhaNosPercorridos);
 					
 					// O nó do início que queríamos remover obtém o valor do maior nó a esquerda (ele que de fato foi removido).
 					noPercorrido.setDado(noMaiorEsquerda.getDado());

@@ -139,7 +139,7 @@ public class ArvoreBinaria {
 					// Obtém o  maior nó da esquerda do nó que queremos remover.
 					NoArvore noMaiorEsquerda = buscarMaiorNoEsquerda(noPercorrido);
 					
-					remover(noPercorrido, noMaiorEsquerda.getDado(), paiNoPercorrido);
+					remover(noPercorrido.getNoEsquerdo(), noMaiorEsquerda.getDado(), noPercorrido);
 					
 					// O nó do início que queríamos remover obtém o valor do maior nó a esquerda (ele que de fato foi removido).
 					noPercorrido.setDado(noMaiorEsquerda.getDado());
