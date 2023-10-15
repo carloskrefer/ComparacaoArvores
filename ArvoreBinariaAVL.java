@@ -16,6 +16,7 @@ public class ArvoreBinariaAVL {
 		Pilha<NoArvoreAVL> pilhaNosPaisPercorridos = new Pilha<NoArvoreAVL>();
 		inserir(raiz, dado, pilhaNosPaisPercorridos); 
 		Pilha<NoArvoreAVL> pilhaRecalculoFatorBalanceamento = new Pilha<NoArvoreAVL>();
+		NoArvoreAVL noPaiDoNoPaiPercorrido;
 		
 		// Esse loop while só serve pra achar o pai mais próximo do nó inserido que
 		// passou a ter balanceamento > 1 ou < -1 após a inserção, a fim de 
@@ -28,8 +29,9 @@ public class ArvoreBinariaAVL {
 			noPaiPercorrido = pilhaNosPaisPercorridos.remover().getDado();
 			pilhaRecalculoFatorBalanceamento.inserir(noPaiPercorrido);
 			noPaiPercorrido.atualizarFatorBalanceamento();
+			noPaiDoNoPaiPercorrido = (pilhaNosPaisPercorridos.getTopo() == null) ? null : pilhaNosPaisPercorridos.getTopo().getDado();
 			if (Math.abs(noPaiPercorrido.getFatorBalanceamento()) > 1) {
-				realizarRotacoes(noPaiPercorrido);
+				realizarRotacoes(noPaiPercorrido, noPaiDoNoPaiPercorrido);
 				break;
 			}
 		}
@@ -39,7 +41,28 @@ public class ArvoreBinariaAVL {
 		}
 	}
 	
-	private void realizarRotacoes(NoArvoreAVL no) {
+	// O parâmetro paiNo só é necessário por causa de um caso particular, quando subárvores da esquerda
+	// passam a ter valores iguais ao da raiz.
+	// Isso ocorre da seguinte maneira:
+	//        8
+	//             9     
+	// Até aqui tudo bem, mas se adicionar o 8 novamente:
+	//        8
+	//             9    
+	//           8
+	// Agora, vai precisar de dupla rotação. Rotação do filho pra direita:
+	//        8
+	//             8
+	//               9
+	// Mas... agora faz rotação do pai pra esquerda:
+	//        8
+	//    8       9
+	// Veja que agora um número igual à raiz se encontra a sua esquerda. 
+	// Por causa disso, não funcionou mais meu método de buscar um nó pai de um nó alvo (buscando o objeto em si).
+	// Dessa maneira, este método passa a precisar do parâmetro paiNo, já que eu não consigo mais buscá-lo de maneira
+	// eficiente. Esse paiNo é usado no realizarRotacaoEsquerda() e realizarRotacaoDireita() pra 
+	// fazer o antigo pai, antes da rotação, passar a apontar pra nova raiz, após a rotação.
+	private void realizarRotacoes(NoArvoreAVL no, NoArvoreAVL paiNo) {
 		NoArvoreAVL filhoQueSofreuInsercao = obterFilhoQueSofreuInsercao(no);
 		
 		boolean isFatorFilhoQueSofreuInsercaoMaisUm  = filhoQueSofreuInsercao.getFatorBalanceamento() ==  1;
@@ -48,18 +71,18 @@ public class ArvoreBinariaAVL {
 		switch (no.getFatorBalanceamento()) {
 			case -2:
 				if (isFatorFilhoQueSofreuInsercaoMenosUm) {
-					realizarRotacaoEsquerda(no);
+					realizarRotacaoEsquerda(no, paiNo);
 				} else if (isFatorFilhoQueSofreuInsercaoMaisUm) {
-					realizarRotacaoDireita(filhoQueSofreuInsercao);
-					realizarRotacaoEsquerda(no);
+					realizarRotacaoDireita(filhoQueSofreuInsercao, no);
+					realizarRotacaoEsquerda(no, paiNo);
 				}
 				break;
 			case 2:
 				if (isFatorFilhoQueSofreuInsercaoMaisUm) {
-					realizarRotacaoDireita(no);
+					realizarRotacaoDireita(no, paiNo);
 				} else if (isFatorFilhoQueSofreuInsercaoMenosUm) {
-					realizarRotacaoEsquerda(filhoQueSofreuInsercao);
-					realizarRotacaoDireita(no);
+					realizarRotacaoEsquerda(filhoQueSofreuInsercao, no);
+					realizarRotacaoDireita(no, paiNo);
 				}
 				break;
 		}
@@ -76,7 +99,7 @@ public class ArvoreBinariaAVL {
 		}
 	}
 	
-	private void realizarRotacaoEsquerda(NoArvoreAVL no) {
+	private void realizarRotacaoEsquerda(NoArvoreAVL no, NoArvoreAVL paiNo) {
 		NoArvoreAVL novaRaizSubarvore = no.getNoDireito();
 		NoArvoreAVL antigoNoEsquerdoDaNovaRaizSubArvore = novaRaizSubarvore.getNoEsquerdo();
 		novaRaizSubarvore.setNoEsquerdo(no);
@@ -85,7 +108,7 @@ public class ArvoreBinariaAVL {
 		if (no == raiz) {
 			raiz = novaRaizSubarvore;
 		} else {
-			NoArvoreAVL noPaiDoNoRotacionado = buscarNoPai(no);
+			NoArvoreAVL noPaiDoNoRotacionado = paiNo;
 			if (noPaiDoNoRotacionado.getNoDireito() == no) {
 				noPaiDoNoRotacionado.setNoDireito(novaRaizSubarvore);
 			} else {
@@ -94,7 +117,7 @@ public class ArvoreBinariaAVL {
 		}
 	}
 	
-	private void realizarRotacaoDireita(NoArvoreAVL no) {
+	private void realizarRotacaoDireita(NoArvoreAVL no, NoArvoreAVL paiNo) {
 		NoArvoreAVL novaRaizSubarvore = no.getNoEsquerdo();
 		NoArvoreAVL antigoNoDireitoDaNovaRaizSubArvore = novaRaizSubarvore.getNoDireito();
 		novaRaizSubarvore.setNoDireito(no);
@@ -103,7 +126,7 @@ public class ArvoreBinariaAVL {
 		if (no == raiz) {
 			raiz = novaRaizSubarvore;
 		} else {
-			NoArvoreAVL noPaiDoNoRotacionado = buscarNoPai(no);
+			NoArvoreAVL noPaiDoNoRotacionado = paiNo;
 			if (noPaiDoNoRotacionado.getNoDireito() == no) {
 				noPaiDoNoRotacionado.setNoDireito(novaRaizSubarvore);
 			} else {
@@ -179,24 +202,27 @@ public class ArvoreBinariaAVL {
 		}
 	}
 	
-	private NoArvoreAVL buscarNoPai(NoArvoreAVL noFilho) {
-		return buscarNoPai(noFilho, raiz);
-	}
-	
-	private NoArvoreAVL buscarNoPai(NoArvoreAVL noFilhoAlvo, NoArvoreAVL noAtual) {
-		if (noFilhoAlvo == raiz) {
-			return null;
-		}
-		if ((noAtual.getNoEsquerdo() == noFilhoAlvo) || (noAtual.getNoDireito() == noFilhoAlvo)) {
-			return noAtual;
-		}
-		
-		if (noFilhoAlvo.getDado() < noAtual.getDado()) {
-			return (noAtual.getNoEsquerdo() == null) ? null : buscarNoPai(noFilhoAlvo, noAtual.getNoEsquerdo());
-		} else {
-			return (noAtual.getNoDireito() == null) ? null : buscarNoPai(noFilhoAlvo, noAtual.getNoDireito());
-		}
-	}
+	// Métodos não mais usados por causa que não é possível buscar o pai de um nó (buscando o objeto em si
+	// ao invés de buscar qualquer nó que tenha o mesmo valor) numa árvore em que se repete valores e permite
+	// rotações. Ver explicação no método realizarRotacoes().
+//	private NoArvoreAVL buscarNoPai(NoArvoreAVL noFilho) {
+//		return buscarNoPai(noFilho, raiz);
+//	}
+//	
+//	private NoArvoreAVL buscarNoPai(NoArvoreAVL noFilhoAlvo, NoArvoreAVL noAtual) {
+//		if (noFilhoAlvo == raiz) {
+//			return null;
+//		}
+//		if ((noAtual.getNoEsquerdo() == noFilhoAlvo) || (noAtual.getNoDireito() == noFilhoAlvo)) {
+//			return noAtual;
+//		}
+//		
+//		if (noFilhoAlvo.getDado() < noAtual.getDado()) {
+//			return (noAtual.getNoEsquerdo() == null) ? null : buscarNoPai(noFilhoAlvo, noAtual.getNoEsquerdo());
+//		} else {
+//			return (noAtual.getNoDireito() == null) ? null : buscarNoPai(noFilhoAlvo, noAtual.getNoDireito());
+//		}
+//	}
 
 	public void imprimir() {
 		new ImpressoraArvoreAVL(this).imprimir();
@@ -204,14 +230,16 @@ public class ArvoreBinariaAVL {
 
 	public void remover(Integer valor) {
 		NoArvoreAVL noPercorrido;
+		NoArvoreAVL noPaiDoNoPercorrido;
 		Pilha<NoArvoreAVL> pilhaNosPercorridos = new Pilha<NoArvoreAVL>();
 		remover(raiz, valor, null, pilhaNosPercorridos);
 		
 		while (!pilhaNosPercorridos.estaVazia()) {
 			noPercorrido = pilhaNosPercorridos.remover().getDado();
 			noPercorrido.atualizarFatorBalanceamento();
+			noPaiDoNoPercorrido = (pilhaNosPercorridos.getTopo() == null) ? null : pilhaNosPercorridos.getTopo().getDado();
 			if (Math.abs(noPercorrido.getFatorBalanceamento()) > 1) {
-				realizarRotacoes(noPercorrido);
+				realizarRotacoes(noPercorrido, noPaiDoNoPercorrido);
 				break;
 			}
 		}

@@ -78,40 +78,16 @@ public class Main {
 //		}
 		
 		ArvoreBinariaAVL a = new ArvoreBinariaAVL();
-		a.inserir(5);
+		a.inserir(20);
+		a.inserir(10);
+		a.inserir(30);
 		a.inserir(8);
-		a.inserir(7);
-		a.inserir(3);
-		a.inserir(4);
-		a.inserir(4);
-		a.inserir(4);
-		a.inserir(6);
-		a.inserir(8);
-		a.inserir(8);
-		a.inserir(9);
-		a.inserir(3);
-		a.inserir(7);
-		a.inserir(3);
-		a.inserir(2);
-		a.inserir(4);
-		a.inserir(2);
-		a.inserir(2);
-		a.inserir(6);
-		a.inserir(9);
-		a.inserir(6);
-		a.inserir(2);
-		a.inserir(0);
-		a.inserir(9);
-		a.inserir(4);
-		a.inserir(9);
-		a.inserir(8);
-		a.inserir(3);
+		a.inserir(12);
+
 		
 		a.imprimir();
-		
-		a.inserir(7);
-		
-		a.imprimir();
+//		a.remover(30);
+//		a.imprimir();
 		
 	}
 	
@@ -146,11 +122,11 @@ public class Main {
 	}
 	
 	private static void inserirNumerosAleatorios(ArvoreBinariaAVL arvore) {
-		int num;
+//		int num;
 		for (int i = 0; i < qtdOperacao; i++) {
-			num = gerarNumeroAleatorio();
-			System.out.println(num);
-			arvore.inserir(num);
+//			num = gerarNumeroAleatorio();
+//			System.out.println(num);
+			arvore.inserir(gerarNumeroAleatorio());
 		}
 	}
 	
