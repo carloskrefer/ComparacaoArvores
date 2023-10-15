@@ -45,8 +45,9 @@ public class ImpressoraArvoreAVL {
 			do {
 				isDadoInexistente = noInterno.getDado().getDado() == -1;
 				System.out.print((
-						isDadoInexistente ? "-" : (noInterno.getDado().getDado()) +
-								"(" + noInterno.getDado().getFatorBalanceamento() + ")") + 
+						isDadoInexistente ? "-" : (noInterno.getDado().getDado())
+								// + "(" + noInterno.getDado().getFatorBalanceamento() + ")"
+								) + 
 						"\t");
 				noInterno = noInterno.getProximoNo();
 			} while (noInterno != null);

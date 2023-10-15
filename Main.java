@@ -83,73 +83,72 @@ public class Main {
 			}
 			break;
 		}
-		
-//		ArvoreBinariaAVL a = new ArvoreBinariaAVL();
-//		a.inserir(5);
-//		a.inserir(4);
-//		a.inserir(7);
-//		a.inserir(3);
-//		a.inserir(4);
-//		a.inserir(6);
-//		a.inserir(8);
-//		a.inserir(4);
-//
-//		a.remover(8);
-//		a.remover(8);
-//		a.remover(9);
-//		a.remover(3);
-//		a.remover(7);
-//		a.remover(3);
-//		a.remover(2);
-//		a.imprimir();
-//		a.remover(4);
-//		
-//		a.imprimir();
-
-		
 	}
 	
 	private static void buscarNumerosAleatorios(ArvoreBinaria arvore) {
+		int num;
+		System.out.print("Valores a buscar: ");
 		for (int i = 0; i < qtdOperacao; i++) {
-			arvore.buscar(gerarNumeroAleatorio());
+			num = gerarNumeroAleatorio();
+			System.out.print(num + " ");
+			arvore.buscar(num);
 		}
+		System.out.println();
 	}
 	
 	private static void buscarNumerosAleatorios(ArvoreBinariaAVL arvore) {
+		int num;
+		System.out.print("Valores a buscar: ");
 		for (int i = 0; i < qtdOperacao; i++) {
-			arvore.buscar(gerarNumeroAleatorio());
+			num = gerarNumeroAleatorio();
+			System.out.print(num + " ");
+			arvore.buscar(num);
 		}
+		System.out.println();
 	}
 	
 	private static void removerNumerosAleatorios(ArvoreBinaria arvore) {
+		int num;
+		System.out.print("Valores a remover: ");
 		for (int i = 0; i < qtdOperacao; i++) {
-			arvore.remover(gerarNumeroAleatorio());
+			num = gerarNumeroAleatorio();
+			System.out.print(num + " ");
+			arvore.remover(num);
 		}
+		System.out.println();
 	}
 	
 	private static void removerNumerosAleatorios(ArvoreBinariaAVL arvore) {
-//		int num;
+		int num;
+		System.out.print("Valores a remover: ");
 		for (int i = 0; i < qtdOperacao; i++) {
-//			num = gerarNumeroAleatorio();
-//			System.out.print(num + " ");
-			arvore.remover(gerarNumeroAleatorio());
+			num = gerarNumeroAleatorio();
+			System.out.print(num + " ");
+			arvore.remover(num);
 		}
 		System.out.println();
 	}
 	
 	private static void inserirNumerosAleatorios(ArvoreBinaria arvore) {
+		int num;
+		System.out.print("Valores a inserir: ");
 		for (int i = 0; i < qtdOperacao; i++) {
-			arvore.inserir(gerarNumeroAleatorio());
+			num = gerarNumeroAleatorio();
+			System.out.print(num + " ");
+			arvore.inserir(num);
 		}
+		System.out.println();
 	}
 	
 	private static void inserirNumerosAleatorios(ArvoreBinariaAVL arvore) {
-//		int num;
+		int num;
+		System.out.print("Valores a inserir: ");
 		for (int i = 0; i < qtdOperacao; i++) {
-//			num = gerarNumeroAleatorio();
-//			System.out.println(num);
-			arvore.inserir(gerarNumeroAleatorio());
+			num = gerarNumeroAleatorio();
+			System.out.print(num + " ");
+			arvore.inserir(num);
 		}
+		System.out.println();
 	}
 	
 	private static int gerarNumeroAleatorio() {

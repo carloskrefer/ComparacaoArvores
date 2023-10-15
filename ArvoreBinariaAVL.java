@@ -238,29 +238,31 @@ public class ArvoreBinariaAVL {
 			noPercorrido = pilhaNosPercorridos.remover().getDado();
 			noPercorrido.atualizarFatorBalanceamento();
 			noPaiDoNoPercorrido = (pilhaNosPercorridos.getTopo() == null) ? null : pilhaNosPercorridos.getTopo().getDado();
-			if (Math.abs(noPercorrido.getFatorBalanceamento()) > 1) {
+			if (Math.abs(noPercorrido.getFatorBalanceamento()) > 1) {				
 				realizarRotacoes(noPercorrido, noPaiDoNoPercorrido);
 				break;
 			}
 		}
-		
-		recalcularTodosFatores(); // isso faz a AVL perder muita performance
+		// Isso faz a AVL perder muita performance
+		// Vou deixar de exibir os fatores na impressão (eles poderão estar desatualizados, mas isso não é problema
+		// pois antes de checá-los eles são atualizados) para evitar essa perda.
+//		recalcularTodosFatores(); 
 
 	}
 	
-	private void recalcularTodosFatores() {
-		recalcularTodosFatores(raiz);
-	}
+//	private void recalcularTodosFatores() {
+//		recalcularTodosFatores(raiz);
+//	}
 	
-	private void recalcularTodosFatores(NoArvoreAVL noAtual) {
-		noAtual.atualizarFatorBalanceamento();
-		if (noAtual.getNoEsquerdo() != null) {
-			recalcularTodosFatores(noAtual.getNoEsquerdo());
-		} 
-		if (noAtual.getNoDireito() != null) {
-			recalcularTodosFatores(noAtual.getNoDireito());
-		}
-	}
+//	private void recalcularTodosFatores(NoArvoreAVL noAtual) {
+//		noAtual.atualizarFatorBalanceamento();
+//		if (noAtual.getNoEsquerdo() != null) {
+//			recalcularTodosFatores(noAtual.getNoEsquerdo());
+//		} 
+//		if (noAtual.getNoDireito() != null) {
+//			recalcularTodosFatores(noAtual.getNoDireito());
+//		}
+//	}
 
 	private void remover(NoArvoreAVL noPercorrido, Integer valorRemover, NoArvoreAVL paiNoPercorrido, Pilha<NoArvoreAVL> pilhaNosPercorridos) {
 		// Este nó não é nulo (para evitar null pointer durante no.getDado)
