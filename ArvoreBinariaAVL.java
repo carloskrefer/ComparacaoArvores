@@ -70,18 +70,18 @@ public class ArvoreBinariaAVL {
 		
 		switch (no.getFatorBalanceamento()) {
 			case -2:
-				if (isFatorFilhoQueSofreuInsercaoMenosUm) {
-					realizarRotacaoEsquerda(no, paiNo);
-				} else if (isFatorFilhoQueSofreuInsercaoMaisUm) {
+				if (isFatorFilhoQueSofreuInsercaoMaisUm) {
 					realizarRotacaoDireita(filhoQueSofreuInsercao, no);
+					realizarRotacaoEsquerda(no, paiNo);
+				} else {
 					realizarRotacaoEsquerda(no, paiNo);
 				}
 				break;
 			case 2:
-				if (isFatorFilhoQueSofreuInsercaoMaisUm) {
-					realizarRotacaoDireita(no, paiNo);
-				} else if (isFatorFilhoQueSofreuInsercaoMenosUm) {
+				if (isFatorFilhoQueSofreuInsercaoMenosUm) {
 					realizarRotacaoEsquerda(filhoQueSofreuInsercao, no);
+					realizarRotacaoDireita(no, paiNo);
+				} else {
 					realizarRotacaoDireita(no, paiNo);
 				}
 				break;

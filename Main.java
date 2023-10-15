@@ -61,6 +61,7 @@ public class Main {
 //		case AVL:
 //			ArvoreBinariaAVL arvoreAVL = new ArvoreBinariaAVL();
 //			inserirNumerosAleatorios(arvoreAVL);
+//			arvoreAVL.imprimir();
 //			if (deveraImprimirArvore) {
 //				System.out.println("Impressão da árvore:");
 //				arvoreAVL.imprimir();			
@@ -78,16 +79,27 @@ public class Main {
 //		}
 		
 		ArvoreBinariaAVL a = new ArvoreBinariaAVL();
-		a.inserir(20);
-		a.inserir(10);
-		a.inserir(30);
+		a.inserir(5);
+		a.inserir(4);
+		a.inserir(7);
+		a.inserir(3);
+		a.inserir(4);
+		a.inserir(6);
 		a.inserir(8);
-		a.inserir(12);
+		a.inserir(4);
 
+		a.remover(8);
+		a.remover(8);
+		a.remover(9);
+		a.remover(3);
+		a.remover(7);
+		a.remover(3);
+		a.remover(2);
+		a.imprimir();
+		a.remover(4);
 		
 		a.imprimir();
-//		a.remover(30);
-//		a.imprimir();
+
 		
 	}
 	
@@ -110,9 +122,13 @@ public class Main {
 	}
 	
 	private static void removerNumerosAleatorios(ArvoreBinariaAVL arvore) {
+		int num;
 		for (int i = 0; i < qtdOperacao; i++) {
-			arvore.remover(gerarNumeroAleatorio());
+			num = gerarNumeroAleatorio();
+			System.out.print(num + " ");
+			arvore.remover(num);
 		}
+		System.out.println();
 	}
 	
 	private static void inserirNumerosAleatorios(ArvoreBinaria arvore) {
