@@ -179,25 +179,25 @@ public class ArvoreBinariaAVL {
 //		}
 //	}
 
-	public void buscar(int valor) {
-		buscar(valor, raiz);
+	public boolean buscar(int valor) {
+		return buscar(valor, raiz);
 	}
 
 	// Não chamar quando raiz for nula
-	private void buscar(int valorBuscado, NoArvoreAVL no) {
+	private boolean buscar(int valorBuscado, NoArvoreAVL no) {
 		if (no.getDado() == valorBuscado) {
-			System.out.println("Valor " + valorBuscado + " encontrado!");
+			return true;
 		} else if (valorBuscado >= no.getDado()) {
 			if (no.getNoDireito() != null) {
-				buscar(valorBuscado, no.getNoDireito());
+				return buscar(valorBuscado, no.getNoDireito());
 			} else {
-				System.out.println("Valor " + valorBuscado + " não encontrado...");
+				return false;
 			}
 		} else {
 			if (no.getNoEsquerdo() != null) {
-				buscar(valorBuscado, no.getNoEsquerdo());
+				return buscar(valorBuscado, no.getNoEsquerdo());
 			} else {
-				System.out.println("Valor " + valorBuscado + " não encontrado...");
+				return false;
 			}
 		}
 	}

@@ -87,24 +87,36 @@ public class Main {
 	
 	private static void buscarNumerosAleatorios(ArvoreBinaria arvore) {
 		int num;
+		int contadorAcertos = 0;
+		boolean isBuscaComSucesso;
 		System.out.print("Valores a buscar: ");
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
 			System.out.print(num + " ");
-			arvore.buscar(num);
+			isBuscaComSucesso = arvore.buscar(num);
+			if (isBuscaComSucesso) {
+				contadorAcertos++;
+			}
 		}
 		System.out.println();
+		System.out.println("Quantidade de valores encontrados com sucesso: " + contadorAcertos);
 	}
 	
 	private static void buscarNumerosAleatorios(ArvoreBinariaAVL arvore) {
 		int num;
+		int contadorAcertos = 0;
+		boolean isBuscaComSucesso;
 		System.out.print("Valores a buscar: ");
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
 			System.out.print(num + " ");
-			arvore.buscar(num);
+			isBuscaComSucesso = arvore.buscar(num);
+			if (isBuscaComSucesso) {
+				contadorAcertos++;
+			}
 		}
 		System.out.println();
+		System.out.println("Quantidade de valores encontrados com sucesso: " + contadorAcertos);
 	}
 	
 	private static void removerNumerosAleatorios(ArvoreBinaria arvore) {
