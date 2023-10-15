@@ -16,36 +16,14 @@ public class Main {
 	private enum TipoOperacao { Insercao, Remocao, Busca }
 	private enum TipoExecucao { TestePerformanceAutomatico, Manual } 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		try {
-			tipoArvore = (args[0].equals("c")) ? TipoArvore.Comum : TipoArvore.AVL;
-			tipoOperacao = (args[1].equals("i")) ? TipoOperacao.Insercao : (args[1].equals("r")) ? TipoOperacao.Remocao : TipoOperacao.Busca;
-			qtdOperacao = (Integer.parseInt(args[2]));
-			deveraImprimirArvore = (args[3].equals("s")) ? true : false;
-			gerador_numero_aleatorios_com_semente = new Random(Long.parseLong(args[4]));
-			limiteValorAleatorio = Integer.parseInt(args[5]);
-			tempoEsperaSegundos = Integer.parseInt(args[6]);
-			if ((limiteValorAleatorio > 1000) || (tempoEsperaSegundos > 60) || (tempoEsperaSegundos < 0)) { throw new Exception(); }
-		} catch(Exception e) {
-			System.out.println("Argumentos inválidos. Reinicie a aplicação.");
-			System.out.println("Argumentos válidos (nesta ordem, todos obrigatórios): ");
-			System.out.println("<c=arvore comum/a=arvore avl> <i=insercao/r=remocao/b=busca> <inteiro=qtd operações> \n"
-					+ "<s=imprimir árvore/n=não imprimir árvore> <inteiro=semente> <inteiro=limite valor aleatório - 1, máx. 1000> \n"
-					+ "<inteiro positivo incluindo zero=tempo espera para abrir jconsole, mín. 0, máx. 60>");
-			System.out.println("Ex: c i 10 s 1 20 3");
-			System.out.println("Irá gerar uma árvore comum, irá inserir 10 valores aleatórios nela de acordo com a semente 1, \n"
-					+ "deverá imprimir a árvore, os números aleatórios variam de 0 à 19 e o sistema aguardará 3 segundos antes de iniciar.");
+			validarInicializarEntradas(args);
+		} catch (IllegalArgumentException e) {
 			return;
 		}
 		
-		try { 
-			int timer = tempoEsperaSegundos;
-			for (int i = 0; i < tempoEsperaSegundos; i++) {
-				System.out.println("Inicie o JConsole, o programa iniciará em " + timer + " segundos...");
-				Thread.sleep(1000);
-				timer--;
-			}
-		} catch(Exception e) {}
+		aguardarTempoSolicitado();
 		
 		switch(tipoArvore) {
 		case Comum:
@@ -85,6 +63,40 @@ public class Main {
 		}
 	}
 	
+	private static void aguardarTempoSolicitado() {	
+		try { 
+			int timer = tempoEsperaSegundos;
+			for (int i = 0; i < tempoEsperaSegundos; i++) {
+				System.out.println("Inicie o JConsole, o programa iniciará em " + timer + " segundos...");
+				Thread.sleep(1000);
+				timer--;
+			}
+		} catch(Exception e) {}
+	}
+	
+	private static void validarInicializarEntradas(String args[]) throws IllegalArgumentException {
+		try {
+			tipoArvore = (args[0].equals("c")) ? TipoArvore.Comum : TipoArvore.AVL;
+			tipoOperacao = (args[1].equals("i")) ? TipoOperacao.Insercao : (args[1].equals("r")) ? TipoOperacao.Remocao : TipoOperacao.Busca;
+			qtdOperacao = (Integer.parseInt(args[2]));
+			deveraImprimirArvore = (args[3].equals("s")) ? true : false;
+			gerador_numero_aleatorios_com_semente = new Random(Long.parseLong(args[4]));
+			limiteValorAleatorio = Integer.parseInt(args[5]);
+			tempoEsperaSegundos = Integer.parseInt(args[6]);
+			if ((limiteValorAleatorio > 1000) || (tempoEsperaSegundos > 60) || (tempoEsperaSegundos < 0)) { throw new Exception(); }
+		} catch(Exception e) {
+			System.out.println("Argumentos inválidos. Reinicie a aplicação.");
+			System.out.println("Argumentos válidos (nesta ordem, todos obrigatórios): ");
+			System.out.println("<c=arvore comum/a=arvore avl> <i=insercao/r=remocao/b=busca> <inteiro=qtd operações> \n"
+					+ "<s=imprimir árvore/n=não imprimir árvore> <inteiro=semente> <inteiro=limite valor aleatório - 1, máx. 1000> \n"
+					+ "<inteiro positivo incluindo zero=tempo espera para abrir jconsole, mín. 0, máx. 60>");
+			System.out.println("Ex: c i 10 s 1 20 3");
+			System.out.println("Irá gerar uma árvore comum, irá inserir 10 valores aleatórios nela de acordo com a semente 1, \n"
+					+ "deverá imprimir a árvore, os números aleatórios variam de 0 à 19 e o sistema aguardará 3 segundos antes de iniciar.");
+			throw new IllegalArgumentException();
+		}
+	}
+ 	
 	private static void buscarNumerosAleatorios(ArvoreBinaria arvore) {
 		int num;
 		int contadorAcertos = 0;
