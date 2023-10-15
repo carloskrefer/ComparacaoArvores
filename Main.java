@@ -17,67 +17,101 @@ public class Main {
 	private enum TipoExecucao { TestePerformanceAutomatico, Manual } 
 	
 	public static void main(String[] args) {
-		try {
-			tipoArvore = (args[0].equals("c")) ? TipoArvore.Comum : TipoArvore.AVL;
-			tipoOperacao = (args[1].equals("i")) ? TipoOperacao.Insercao : (args[1].equals("r")) ? TipoOperacao.Remocao : TipoOperacao.Busca;
-			qtdOperacao = (Integer.parseInt(args[2]));
-			deveraImprimirArvore = (args[3].equals("s")) ? true : false;
-			gerador_numero_aleatorios_com_semente = new Random(Long.parseLong(args[4]));
-			limiteValorAleatorio = Integer.parseInt(args[5]);
-			tempoEsperaSegundos = Integer.parseInt(args[6]);
-			if ((limiteValorAleatorio > 1000) || (tempoEsperaSegundos > 60) || (tempoEsperaSegundos < 0)) { throw new Exception(); }
-		} catch(Exception e) {
-			System.out.println("Argumentos inválidos. Reinicie a aplicação.");
-			return;
-		}
+//		try {
+//			tipoArvore = (args[0].equals("c")) ? TipoArvore.Comum : TipoArvore.AVL;
+//			tipoOperacao = (args[1].equals("i")) ? TipoOperacao.Insercao : (args[1].equals("r")) ? TipoOperacao.Remocao : TipoOperacao.Busca;
+//			qtdOperacao = (Integer.parseInt(args[2]));
+//			deveraImprimirArvore = (args[3].equals("s")) ? true : false;
+//			gerador_numero_aleatorios_com_semente = new Random(Long.parseLong(args[4]));
+//			limiteValorAleatorio = Integer.parseInt(args[5]);
+//			tempoEsperaSegundos = Integer.parseInt(args[6]);
+//			if ((limiteValorAleatorio > 1000) || (tempoEsperaSegundos > 60) || (tempoEsperaSegundos < 0)) { throw new Exception(); }
+//		} catch(Exception e) {
+//			System.out.println("Argumentos inválidos. Reinicie a aplicação.");
+//			return;
+//		}
+//		
+//		try { 
+//			int timer = tempoEsperaSegundos;
+//			for (int i = 0; i < tempoEsperaSegundos; i++) {
+//				System.out.println("Inicie o JConsole, o programa iniciará em " + timer + " segundos...");
+//				Thread.sleep(1000);
+//				timer--;
+//			}
+//		} catch(Exception e) {}
+//		
+//		switch(tipoArvore) {
+//		case Comum:
+//			ArvoreBinaria arvoreComum = new ArvoreBinaria();
+//			inserirNumerosAleatorios(arvoreComum);
+//			if (deveraImprimirArvore) {
+//				System.out.println("Impressão da árvore:");
+//				arvoreComum.imprimir();			
+//			}
+//			if (tipoOperacao.equals(TipoOperacao.Remocao)) {
+//				removerNumerosAleatorios(arvoreComum);
+//				if (deveraImprimirArvore) {
+//					System.out.println("Impressão da árvore:");
+//					arvoreComum.imprimir();			
+//				}
+//			} else if (tipoOperacao.equals(TipoOperacao.Busca)) {
+//				buscarNumerosAleatorios(arvoreComum);
+//			}
+//			break;
+//		case AVL:
+//			ArvoreBinariaAVL arvoreAVL = new ArvoreBinariaAVL();
+//			inserirNumerosAleatorios(arvoreAVL);
+//			if (deveraImprimirArvore) {
+//				System.out.println("Impressão da árvore:");
+//				arvoreAVL.imprimir();			
+//			}
+//			if (tipoOperacao.equals(TipoOperacao.Remocao)) {
+//				removerNumerosAleatorios(arvoreAVL);
+//				if (deveraImprimirArvore) {
+//					System.out.println("Impressão da árvore:");
+//					arvoreAVL.imprimir();			
+//				}
+//			} else if (tipoOperacao.equals(TipoOperacao.Busca)) {
+//				buscarNumerosAleatorios(arvoreAVL);
+//			}
+//			break;
+//		}
 		
-		try { 
-			int timer = tempoEsperaSegundos;
-			for (int i = 0; i < tempoEsperaSegundos; i++) {
-				System.out.println("Inicie o JConsole, o programa iniciará em " + timer + " segundos...");
-				Thread.sleep(1000);
-				timer--;
-			}
-		} catch(Exception e) {}
+		ArvoreBinariaAVL a = new ArvoreBinariaAVL();
+		a.inserir(5);
+		a.inserir(8);
+		a.inserir(7);
+		a.inserir(3);
+		a.inserir(4);
+		a.inserir(4);
+		a.inserir(4);
+		a.inserir(6);
+		a.inserir(8);
+		a.inserir(8);
+		a.inserir(9);
+		a.inserir(3);
+		a.inserir(7);
+		a.inserir(3);
+		a.inserir(2);
+		a.inserir(4);
+		a.inserir(2);
+		a.inserir(2);
+		a.inserir(6);
+		a.inserir(9);
+		a.inserir(6);
+		a.inserir(2);
+		a.inserir(0);
+		a.inserir(9);
+		a.inserir(4);
+		a.inserir(9);
+		a.inserir(8);
+		a.inserir(3);
 		
-		switch(tipoArvore) {
-		case Comum:
-			ArvoreBinaria arvoreComum = new ArvoreBinaria();
-			inserirNumerosAleatorios(arvoreComum);
-			if (deveraImprimirArvore) {
-				System.out.println("Impressão da árvore:");
-				arvoreComum.imprimir();			
-			}
-			if (tipoOperacao.equals(TipoOperacao.Remocao)) {
-				removerNumerosAleatorios(arvoreComum);
-				if (deveraImprimirArvore) {
-					System.out.println("Impressão da árvore:");
-					arvoreComum.imprimir();			
-				}
-			} else if (tipoOperacao.equals(TipoOperacao.Busca)) {
-				buscarNumerosAleatorios(arvoreComum);
-			}
-			break;
-		case AVL:
-			ArvoreBinariaAVL arvoreAVL = new ArvoreBinariaAVL();
-			inserirNumerosAleatorios(arvoreAVL);
-			if (deveraImprimirArvore) {
-				System.out.println("Impressão da árvore:");
-				arvoreAVL.imprimir();			
-			}
-			if (tipoOperacao.equals(TipoOperacao.Remocao)) {
-				removerNumerosAleatorios(arvoreAVL);
-				if (deveraImprimirArvore) {
-					System.out.println("Impressão da árvore:");
-					arvoreAVL.imprimir();			
-				}
-			} else if (tipoOperacao.equals(TipoOperacao.Busca)) {
-				buscarNumerosAleatorios(arvoreAVL);
-			}
-			break;
-		}
+		a.imprimir();
 		
-
+		a.inserir(7);
+		
+		a.imprimir();
 		
 	}
 	
