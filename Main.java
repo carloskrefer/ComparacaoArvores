@@ -193,7 +193,6 @@ public class Main {
 			} else if (tipoOperacao.equals(TipoOperacao.Busca)) {
 				buscarNumerosAleatorios(arvoreAVL);
 			}
-			System.out.println("avl!");
 			break;
 		}
 	}
