@@ -203,78 +203,112 @@ public class ArvoreBinariaAVL {
 	}
 
 	public void remover(Integer valor) {
-		removerNo(raiz, valor, null); // Começamos pela raiz. O pai é null pois
-	} // a raiz não possui pai (por isso, null).
-
-	private NoArvoreAVL removerNo(NoArvoreAVL no, Integer valor, NoArvoreAVL pai) {
-		// Este nó não é nulo. Isso é importante, pois daria erro ao fazer o próximo IF
-		// comparando um null com um valor.
-		if (no != null) {
-			// Este nó não é nulo e é o nó que queremos remover.
-			if (no.getDado() == valor) {
-				// Este nó não é nulo, é aquele que queremos remover e não possui filhos.
-				if (no.getNoEsquerdo() == null && no.getNoDireito() == null) {
-					// Este nó não é nulo, é aquele que queremos remover, não possui filhos e é a
-					// raiz.
-					if (pai == null) {
-						raiz = null;
-						// Este nó não é nulo, é aquele que queremos remover, não possui filhos, não é a
-						// raiz e está a direita do pai.
-					} else if (no.getDado() >= pai.getDado()) {
-						pai.setNoDireito(null);
-						// Este nó não é nulo, é aquele que queremos remover, não possui filhos, não é a
-						// raiz e está a esquerda do pai.
-					} else {
-						pai.setNoEsquerdo(null);
-					}
-					// Este nó não é nulo, é aquele que queremos remover, só possui filho a direita.
-				} else if (no.getNoEsquerdo() == null) {
-					// Este nó não é nulo, é aquele que queremos remover, só possui filho a direita
-					// e está a direita do pai.
-					if (no.getDado() >= pai.getDado()) {
-						pai.setNoDireito(no.getNoDireito());
-						// Este nó não é nulo, é aquele que queremos remover, só possui filho a direita
-						// e está a esquerda do pai.
-					} else {
-						pai.setNoEsquerdo(no.getNoDireito());
-					}
-					// Este nó não é nulo, é aquele que queremos remover, só possui filho a
-					// esquerda.
-				} else if (no.getNoDireito() == null) {
-					// Este nó não é nulo, é aquele que queremos remover, só possui filho a esquerda
-					// e está a direita do pai.
-					if (no.getDado() >= pai.getDado()) {
-						pai.setNoDireito(no.getNoEsquerdo());
-						// Este nó não é nulo, é aquele que queremos remover, só possui filho a esquerda
-						// e está a esquerda do pai.
-					} else {
-						pai.setNoEsquerdo(no.getNoEsquerdo());
-					}
-					// Este nó não é nulo, é aquele que queremos remover, possui filho a direita e a
-					// esquerda.
-				} else {
-					// Obtém o valor do maior nó a esquerda do nó que queremos remover.
-					Integer maior = maiorEsquerda(no).getDado();
-					// Remove o nó com o valor que acabamos de achar.
-					removerNo(no, maior, pai);
-					// O nó do início que queríamos remover obtém o valor do maior nó a esquerda.
-					no.setDado(maior);
-
-				}
-				// Valor que estou procurando remover não é igual ao valor do nó atual, mas é
-				// maior.
-			} else if (valor > no.getDado()) {
-				removerNo(no.getNoDireito(), valor, no);
-				// Valor que estou procurando remover não é igual ao valor do nó atual, mas é
-				// menor.
-			} else {
-				removerNo(no.getNoEsquerdo(), valor, no);
+		NoArvoreAVL noPercorrido;
+		Pilha<NoArvoreAVL> pilhaNosPercorridos = new Pilha<NoArvoreAVL>();
+		remover(raiz, valor, null, pilhaNosPercorridos);
+		Pilha<NoArvoreAVL> pilhaRecalculoFatorBalanceamento = new Pilha<NoArvoreAVL>();
+		
+		while (!pilhaNosPercorridos.estaVazia()) {
+			noPercorrido = pilhaNosPercorridos.remover().getDado();
+			pilhaRecalculoFatorBalanceamento.inserir(noPercorrido);
+			noPercorrido.atualizarFatorBalanceamento();
+			if (Math.abs(noPercorrido.getFatorBalanceamento()) > 1) {
+				realizarRotacoes(noPercorrido);
+				break;
 			}
 		}
-		return null;
+		
+		while (!pilhaRecalculoFatorBalanceamento.estaVazia()) {
+			pilhaRecalculoFatorBalanceamento.remover().getDado().atualizarFatorBalanceamento();
+		}
+
 	}
 
-	private NoArvoreAVL maiorEsquerda(NoArvoreAVL no) {
+	private void remover(NoArvoreAVL noPercorrido, Integer valorRemover, NoArvoreAVL paiNoPercorrido, Pilha<NoArvoreAVL> pilhaNosPercorridos) {
+		// Este nó não é nulo (para evitar null pointer durante no.getDado)
+		if (noPercorrido != null) {
+			// Este nó não é nulo e é o nó que queremos remover.
+			if (noPercorrido.getDado() == valorRemover) {
+				// Este nó não é nulo, é aquele que queremos remover e não possui filhos.
+				if (noPercorrido.getNoEsquerdo() == null && noPercorrido.getNoDireito() == null) {
+					// Este nó não é nulo, é aquele que queremos remover, não possui filhos e é a
+					// raiz.
+					if (paiNoPercorrido == null) {
+						raiz = null;
+					// Este nó não é nulo, é aquele que queremos remover, não possui filhos, não é a
+					// raiz e está a direita do pai.
+					} else if (noPercorrido.getDado() >= paiNoPercorrido.getDado()) {
+						paiNoPercorrido.setNoDireito(null);
+					// Este nó não é nulo, é aquele que queremos remover, não possui filhos, não é a
+					// raiz e está a esquerda do pai.
+					} else {
+						paiNoPercorrido.setNoEsquerdo(null);
+					}
+				// Este nó não é nulo, é aquele que queremos remover, só possui filho a direita.
+				} else if (noPercorrido.getNoEsquerdo() == null) {
+					// Este nó não é nulo, é aquele que queremos remover, só possui filho a direita,
+					// e é a raiz.
+					if (paiNoPercorrido == null) {
+						raiz = noPercorrido.getNoDireito();
+					// Este nó não é nulo, é aquele que queremos remover, só possui filho a direita
+					// e está a direita do pai.
+					} else if (noPercorrido.getDado() >= paiNoPercorrido.getDado()) {
+						paiNoPercorrido.setNoDireito(noPercorrido.getNoDireito());
+					// Este nó não é nulo, é aquele que queremos remover, só possui filho a direita
+					// e está a esquerda do pai.
+					} else {
+						paiNoPercorrido.setNoEsquerdo(noPercorrido.getNoDireito());
+					}
+				// Este nó não é nulo, é aquele que queremos remover, só possui filho a
+				// esquerda.
+				} else if (noPercorrido.getNoDireito() == null) {
+					// Este nó não é nulo, é aquele que queremos remover, só possui filho a
+					// esquerda e é a raiz.
+					if (paiNoPercorrido == null) {
+						raiz = noPercorrido.getNoEsquerdo();
+					// Este nó não é nulo, é aquele que queremos remover, só possui filho a esquerda
+					// e está a direita do pai.
+					} else if (noPercorrido.getDado() >= paiNoPercorrido.getDado()) {
+						paiNoPercorrido.setNoDireito(noPercorrido.getNoEsquerdo());
+					// Este nó não é nulo, é aquele que queremos remover, só possui filho a esquerda
+					// e está a esquerda do pai.
+					} else {
+						paiNoPercorrido.setNoEsquerdo(noPercorrido.getNoEsquerdo());
+					}
+				// Este nó não é nulo, é aquele que queremos remover, possui filho a direita e a
+				// esquerda.
+				} else {
+					// Obtém o  maior nó da esquerda do nó que queremos remover.
+					NoArvoreAVL noMaiorEsquerda = buscarMaiorNoEsquerda(noPercorrido);
+
+					// Queremos que o noPercorrido seja inserido na pilha, pois ele receberá o valor do maior da 
+					// esquerda e deverá ser recalculado seu balanceamento.
+					// Mas, se o maior da esquerda for exatamente o filho da esquerda dele, então noPercorrido não será inserido
+					// na pilha. A condição abaixo busca conferir isso e inserí-lo se for o caso.
+					if (noPercorrido.getNoEsquerdo() == noMaiorEsquerda) {
+						pilhaNosPercorridos.inserir(noPercorrido);
+					}
+					
+					remover(noPercorrido, noMaiorEsquerda.getDado(), paiNoPercorrido, pilhaNosPercorridos);
+					
+					// O nó do início que queríamos remover obtém o valor do maior nó a esquerda (ele que de fato foi removido).
+					noPercorrido.setDado(noMaiorEsquerda.getDado());
+				}
+			// Valor que estou procurando remover não é igual ao valor do nó atual, mas é
+			// maior.
+			} else if (valorRemover > noPercorrido.getDado()) {
+				pilhaNosPercorridos.inserir(noPercorrido);
+				remover(noPercorrido.getNoDireito(), valorRemover, noPercorrido, pilhaNosPercorridos);
+			// Valor que estou procurando remover não é igual ao valor do nó atual, mas é
+			// menor.
+			} else {
+				pilhaNosPercorridos.inserir(noPercorrido);
+				remover(noPercorrido.getNoEsquerdo(), valorRemover, noPercorrido, pilhaNosPercorridos);
+			}
+		}
+	}
+
+	private NoArvoreAVL buscarMaiorNoEsquerda(NoArvoreAVL no) {
 		// Para encontrar o maior à esquerda do nó, primeiro temos que saber se existe
 		// nós a esquerda.
 		if (no.getNoEsquerdo() != null) {
