@@ -170,7 +170,7 @@ public class Main {
 			if (tipoOperacao.equals(TipoOperacao.Remocao)) {
 				removerNumerosAleatorios(arvoreComum);
 				if (deveraImprimirArvore) {
-					System.out.println("Impressão da árvore:");
+					System.out.println("Impressão da árvore após a remoção:");
 					arvoreComum.imprimir();			
 				}
 			} else if (tipoOperacao.equals(TipoOperacao.Busca)) {
@@ -187,7 +187,7 @@ public class Main {
 			if (tipoOperacao.equals(TipoOperacao.Remocao)) {
 				removerNumerosAleatorios(arvoreAVL);
 				if (deveraImprimirArvore) {
-					System.out.println("Impressão da árvore:");
+					System.out.println("Impressão da árvore após a remoção:");
 					arvoreAVL.imprimir();			
 				}
 			} else if (tipoOperacao.equals(TipoOperacao.Busca)) {
@@ -213,7 +213,7 @@ public class Main {
 			tipoExecucao = (args[0].equals("t")) ? TipoExecucao.TestePerformanceAutomatico : TipoExecucao.Manual;
 			tipoArvore = (args[1].equals("c")) ? TipoArvore.Comum : TipoArvore.AVL;
 			if (tipoExecucao.equals(TipoExecucao.TestePerformanceAutomatico)) {
-				tipoOperacao = (args[2].equals("i")) ? TipoOperacao.Insercao : (args[1].equals("r")) ? TipoOperacao.Remocao : TipoOperacao.Busca;
+				tipoOperacao = (args[2].equals("i")) ? TipoOperacao.Insercao : ((args[2].equals("r")) ? TipoOperacao.Remocao : TipoOperacao.Busca);
 				qtdOperacao = (Integer.parseInt(args[3]));
 				deveraImprimirArvore = (args[4].equals("s")) ? true : false;
 				gerador_numero_aleatorios_com_semente = new Random(Long.parseLong(args[5]));
@@ -242,10 +242,14 @@ public class Main {
 		int num;
 		int contadorAcertos = 0;
 		boolean isBuscaComSucesso;
-		System.out.print("Valores a buscar: ");
+		if (qtdOperacao > 100) {
+			System.out.println("Há muitos números, eles não serão impressos.");
+		} else {
+			System.out.print("Valores a buscar: ");
+		}	
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
-			System.out.print(num + " ");
+			if (qtdOperacao <= 100) { System.out.print(num + " "); }
 			isBuscaComSucesso = arvore.buscar(num);
 			if (isBuscaComSucesso) {
 				contadorAcertos++;
@@ -259,10 +263,14 @@ public class Main {
 		int num;
 		int contadorAcertos = 0;
 		boolean isBuscaComSucesso;
-		System.out.print("Valores a buscar: ");
+		if (qtdOperacao > 100) {
+			System.out.println("Há muitos números, eles não serão impressos.");
+		} else {
+			System.out.print("Valores a buscar: ");
+		}	
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
-			System.out.print(num + " ");
+			if (qtdOperacao <= 100) { System.out.print(num + " "); }
 			isBuscaComSucesso = arvore.buscar(num);
 			if (isBuscaComSucesso) {
 				contadorAcertos++;
@@ -274,10 +282,14 @@ public class Main {
 	
 	private static void removerNumerosAleatorios(ArvoreBinaria arvore) {
 		int num;
-		System.out.print("Valores a remover: ");
+		if (qtdOperacao > 100) {
+			System.out.println("Há muitos números, eles não serão impressos.");
+		} else {
+			System.out.print("Valores a remover: ");
+		}
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
-			System.out.print(num + " ");
+			if (qtdOperacao <= 100) { System.out.print(num + " "); }
 			arvore.remover(num);
 		}
 		System.out.println();
@@ -285,10 +297,14 @@ public class Main {
 	
 	private static void removerNumerosAleatorios(ArvoreBinariaAVL arvore) {
 		int num;
-		System.out.print("Valores a remover: ");
+		if (qtdOperacao > 100) {
+			System.out.println("Há muitos números, eles não serão impressos.");
+		} else {
+			System.out.print("Valores a remover: ");
+		}
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
-			System.out.print(num + " ");
+			if (qtdOperacao <= 100) { System.out.print(num + " "); }
 			arvore.remover(num);
 		}
 		System.out.println();
@@ -296,10 +312,14 @@ public class Main {
 	
 	private static void inserirNumerosAleatorios(ArvoreBinaria arvore) {
 		int num;
-		System.out.print("Valores a inserir: ");
+		if (qtdOperacao > 100) {
+			System.out.println("Há muitos números, eles não serão impressos.");
+		} else {
+			System.out.print("Valores a inserir: ");
+		}
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
-			System.out.print(num + " ");
+			if (qtdOperacao <= 100) { System.out.print(num + " "); }
 			arvore.inserir(num);
 		}
 		System.out.println();
@@ -307,10 +327,14 @@ public class Main {
 	
 	private static void inserirNumerosAleatorios(ArvoreBinariaAVL arvore) {
 		int num;
-		System.out.print("Valores a inserir: ");
+		if (qtdOperacao > 100) {
+			System.out.println("Há muitos números, eles não serão impressos.");
+		} else {
+			System.out.print("Valores a inserir: ");
+		}
 		for (int i = 0; i < qtdOperacao; i++) {
 			num = gerarNumeroAleatorio();
-			System.out.print(num + " ");
+			if (qtdOperacao <= 100) { System.out.print(num + " "); }
 			arvore.inserir(num);
 		}
 		System.out.println();
