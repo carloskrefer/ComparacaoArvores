@@ -33,20 +33,11 @@ public class ImpressoraArvoreAVL {
 		No<NoArvoreAVL> noInterno;
 		boolean isDadoInexistente = true;
 		
-		int contadorEspacamento = arvore.buscarAltura() + 1;
-		
 		do {
 			//if pra nao imprimir a última lista que só contém -1
 			if (noSuperior.getProximoNo() == null) {
 				break;
 			}
-			if (contadorEspacamento != 1) {
-				for (int i = 0; i < contadorEspacamento; i++) {
-					System.out.print("\t");
-				}
-			}
-			
-			contadorEspacamento--;
 			
 			listaInterna = noSuperior.getDado();
 			noInterno = listaInterna.getPrimeiroNo();	

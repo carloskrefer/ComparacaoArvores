@@ -206,11 +206,9 @@ public class ArvoreBinariaAVL {
 		NoArvoreAVL noPercorrido;
 		Pilha<NoArvoreAVL> pilhaNosPercorridos = new Pilha<NoArvoreAVL>();
 		remover(raiz, valor, null, pilhaNosPercorridos);
-		Pilha<NoArvoreAVL> pilhaRecalculoFatorBalanceamento = new Pilha<NoArvoreAVL>();
 		
 		while (!pilhaNosPercorridos.estaVazia()) {
 			noPercorrido = pilhaNosPercorridos.remover().getDado();
-			pilhaRecalculoFatorBalanceamento.inserir(noPercorrido);
 			noPercorrido.atualizarFatorBalanceamento();
 			if (Math.abs(noPercorrido.getFatorBalanceamento()) > 1) {
 				realizarRotacoes(noPercorrido);
@@ -218,10 +216,22 @@ public class ArvoreBinariaAVL {
 			}
 		}
 		
-		while (!pilhaRecalculoFatorBalanceamento.estaVazia()) {
-			pilhaRecalculoFatorBalanceamento.remover().getDado().atualizarFatorBalanceamento();
-		}
+		recalcularTodosFatores();
 
+	}
+	
+	private void recalcularTodosFatores() {
+		recalcularTodosFatores(raiz);
+	}
+	
+	private void recalcularTodosFatores(NoArvoreAVL noAtual) {
+		noAtual.atualizarFatorBalanceamento();
+		if (noAtual.getNoEsquerdo() != null) {
+			recalcularTodosFatores(noAtual.getNoEsquerdo());
+		} 
+		if (noAtual.getNoDireito() != null) {
+			recalcularTodosFatores(noAtual.getNoDireito());
+		}
 	}
 
 	private void remover(NoArvoreAVL noPercorrido, Integer valorRemover, NoArvoreAVL paiNoPercorrido, Pilha<NoArvoreAVL> pilhaNosPercorridos) {
