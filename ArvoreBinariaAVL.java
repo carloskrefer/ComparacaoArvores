@@ -180,7 +180,11 @@ public class ArvoreBinariaAVL {
 //	}
 
 	public boolean buscar(int valor) {
-		return buscar(valor, raiz);
+		if (raiz == null) {
+			return false;
+		} else {
+			return buscar(valor, raiz);
+		}
 	}
 
 	// Não chamar quando raiz for nula
